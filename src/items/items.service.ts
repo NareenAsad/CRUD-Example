@@ -13,8 +13,8 @@ export class ItemsService {
   private items: Item[] = [];
   private idCounter = 1;
 
-  create(createItemDto: CreateItemDto) {
-    const item = {
+  create(createItemDto: CreateItemDto): Item {
+    const item: Item = {
       id: this.idCounter++,
       ...createItemDto,
     };
@@ -22,26 +22,26 @@ export class ItemsService {
     return item;
   }
 
-  findAll() {
+  findAll(): Item[] {
     return this.items;
   }
 
-  findOne(id: number) {
+  findOne(id: number): Item {
     const item = this.items.find((i) => i.id === id);
     if (!item) throw new NotFoundException('Item not found');
     return item;
   }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
+  update(id: number, updateItemDto: UpdateItemDto): Item {
     const index = this.items.findIndex((i) => i.id === id);
     if (index === -1) throw new NotFoundException('Item not found');
 
-    const updatedItem = { ...this.items[index], ...updateItemDto };
+    const updatedItem: Item = { ...this.items[index], ...updateItemDto };
     this.items[index] = updatedItem;
     return updatedItem;
   }
 
-  remove(id: number) {
+  remove(id: number): Item {
     const index = this.items.findIndex((i) => i.id === id);
     if (index === -1) throw new NotFoundException('Item not found');
     const removed = this.items.splice(index, 1);

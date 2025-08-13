@@ -1,0 +1,87 @@
+{
+    "info": {
+      "name": "NestJS CRUD Mock",
+      "_postman_id": "a31c1d5a-f6d2-4e8a-9b28-4bb6c07ad913",
+      "description": "Postman collection for NestJS mock-data CRUD API with Items and Users",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Items",
+        "item": [
+          {
+            "name": "Create Item",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"Item One\",\n  \"description\": \"This is item one\"\n}"
+              },
+              "url": { "raw": "http://localhost:3000/items", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["items"] }
+            }
+          },
+          {
+            "name": "Get All Items",
+            "request": { "method": "GET", "url": { "raw": "http://localhost:3000/items", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["items"] } }
+          },
+          {
+            "name": "Get Item by ID",
+            "request": { "method": "GET", "url": { "raw": "http://localhost:3000/items/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["items", "1"] } }
+          },
+          {
+            "name": "Update Item",
+            "request": {
+              "method": "PUT",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Item\",\n  \"description\": \"Updated description\"\n}" },
+              "url": { "raw": "http://localhost:3000/items/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["items", "1"] }
+            }
+          },
+          {
+            "name": "Delete Item",
+            "request": { "method": "DELETE", "url": { "raw": "http://localhost:3000/items/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["items", "1"] } }
+          }
+        ]
+      },
+      {
+        "name": "Users",
+        "item": [
+          {
+            "name": "Create User",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}"
+              },
+              "url": { "raw": "http://localhost:3000/users", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users"] }
+            }
+          },
+          {
+            "name": "Get All Users",
+            "request": { "method": "GET", "url": { "raw": "http://localhost:3000/users", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users"] } }
+          },
+          {
+            "name": "Get User by ID",
+            "request": { "method": "GET", "url": { "raw": "http://localhost:3000/users/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users", "1"] } }
+          },
+          {
+            "name": "Update User",
+            "request": {
+              "method": "PUT",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": { "mode": "raw", "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"newpass456\"\n}" },
+              "url": { "raw": "http://localhost:3000/users/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users", "1"] }
+            }
+          },
+          {
+            "name": "Delete User",
+            "request": { "method": "DELETE", "url": { "raw": "http://localhost:3000/users/1", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["users", "1"] } }
+          }
+        ]
+      }
+    ]
+  }
+  
