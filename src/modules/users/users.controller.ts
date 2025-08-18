@@ -10,34 +10,42 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import type { User } from './users.service';
+import { ItemsService } from '../items/items.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly itemsService: ItemsService,
+  ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): User {
+  create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
-  findAll(): User[] {
+  findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): User {
+  findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): User {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): User {
+  remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Get(':id/items')
+  findItems(@Param('id') id: string) {
+    return this.itemsService.findAllByUser(+id);
   }
 }
