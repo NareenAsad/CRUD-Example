@@ -1,14 +1,3 @@
-Got it 👍 You basically want me to update your `README.md` to reflect the **work we did today**:
-
-* Added `Users` module with **register** and **login** (no tokens, just mock session-like behavior).
-* Connected `Users` and `Items` with relationships.
-* Fixed dependency issues (`ItemsService` export/import).
-* API now supports **user registration, login, and user-owned items**.
-
-Here’s an updated `README.md` draft 👇:
-
----
-
 # NestJS CRUD Mock API with Users & Items
 
 A simple REST API built with **NestJS** that provides CRUD operations for **users** and their **items**.
