@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Column,
   Entity,
@@ -9,7 +10,7 @@ import { Item } from '../../items/entities/item.entity';
 
 @Entity({ name: 'users' })
 @Unique(['email'])
-export class UserEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 

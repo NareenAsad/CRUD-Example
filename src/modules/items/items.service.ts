@@ -4,30 +4,31 @@ import { Repository } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { Item } from './entities/item.entity';
-import { UserEntity } from '../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ItemsService {
   constructor(
     @InjectRepository(Item)
-    private readonly itemRepository: Repository<Item>,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly itemRepo: Repository<Item>,
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
   ) {}
 
   async create(createItemDto: CreateItemDto, userId: number): Promise<Item> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
-    const item = this.itemRepository.create({ ...createItemDto, user });
-    return this.itemRepository.save(item);
+
+    const item = this.itemRepo.create({ ...createItemDto, user });
+    return await this.itemRepo.save(item);
   }
 
   async findAll(): Promise<Item[]> {
-    return this.itemRepository.find({ relations: ['user'] });
+    return this.itemRepo.find({ relations: ['user'] });
   }
 
   async findOne(id: number): Promise<Item> {
-    const item = await this.itemRepository.findOne({
+    const item = await this.itemRepo.findOne({
       where: { id },
       relations: ['user'],
     });
@@ -36,38 +37,26 @@ export class ItemsService {
   }
 
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
-    const item = await this.itemRepository.findOne({
-      where: { id },
-      relations: ['user'],
-    });
-    if (!item) throw new NotFoundException('Item not found');
+    const item = await this.findOne(id);
     Object.assign(item, updateItemDto);
-    return this.itemRepository.save(item);
+    return await this.itemRepo.save(item);
   }
 
   async remove(id: number): Promise<Item> {
-    const item = await this.itemRepository.findOne({
-      where: { id },
-      relations: ['user'],
-    });
-    if (!item) throw new NotFoundException('Item not found');
-    await this.itemRepository.remove(item);
+    const item = await this.findOne(id);
+    await this.itemRepo.remove(item);
     return item;
   }
 
   async findAllByUser(userId: number): Promise<Item[]> {
-    return this.itemRepository.find({
+    return this.itemRepo.find({
       where: { user: { id: userId } },
       relations: ['user'],
     });
   }
 
-  async findOwnerByItemId(itemId: number): Promise<UserEntity> {
-    const item = await this.itemRepository.findOne({
-      where: { id: itemId },
-      relations: ['user'],
-    });
-    if (!item) throw new NotFoundException('Item not found');
+  async findOwnerByItemId(itemId: number): Promise<User> {
+    const item = await this.findOne(itemId);
     return item.user;
   }
 }

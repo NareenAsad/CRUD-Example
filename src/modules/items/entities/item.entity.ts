@@ -1,5 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { UserEntity } from '../../users/entities/user.entity';
+/* eslint-disable prettier/prettier */
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @Entity({ name: 'items' })
 export class Item {
@@ -12,9 +19,13 @@ export class Item {
   @Column({ type: 'varchar', length: 255 })
   description: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.items, {
+  @Column()
+  user_id: number;
+
+  @ManyToOne(() => User, (user) => user.items, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  user: UserEntity;
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

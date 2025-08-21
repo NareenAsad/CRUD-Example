@@ -7,7 +7,7 @@ import { ItemsModule } from './modules/items/items.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SeedService } from './modules/seed/seed.service';
-import { UserEntity } from './modules/users/entities/user.entity';
+import { User } from './modules/users/entities/user.entity';
 import { Item } from './modules/items/entities/item.entity';
 
 dotenv.config();
@@ -21,7 +21,7 @@ dotenv.config();
       username: process.env.DB_USER ?? 'root',
       password: process.env.DB_PASS ?? '1234',
       database: 'practice_db',
-      entities: [UserEntity, Item],
+      entities: [User, Item],
       synchronize: true,
       logging: false,
     }),
