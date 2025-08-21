@@ -1,231 +1,184 @@
-# NestJS CRUD Mock API
+# NestJS CRUD Mock API with Users & Items
 
-A simple REST API built with NestJS that provides CRUD (Create, Read, Update, Delete) operations for items. This project serves as a mock API with in-memory data storage.
+A simple REST API built with **NestJS** that provides CRUD operations for **users** and their **items**.
+This project started as a mock items CRUD API and has been extended to support **user registration, login, and user-item relationships**.
 
 ## 🚀 Features
 
-- **RESTful API** - Full CRUD operations for items
-- **TypeScript** - Built with TypeScript for type safety
-- **NestJS Framework** - Modern, scalable Node.js framework
-- **In-Memory Storage** - Simple mock data storage (no database required)
-- **DTO Validation** - Request/response data transfer objects
-- **Error Handling** - Proper HTTP status codes and error messages
-- **Code Formatting** - Prettier and ESLint for consistent code style
+* **Users API**: Register & login (no JWT/tokens, simple session-style auth)
+* **Items API**: Full CRUD operations for items, owned by users
+* **RESTful API** with proper HTTP status codes
+* **TypeScript** for type safety
+* **NestJS Framework** – modular, scalable, testable
+* **In-Memory / SQLite (via TypeORM)** storage
+* **DTO Validation** for inputs
+* **Error Handling** – 400, 404, 500
+
+---
 
 ## 📋 Prerequisites
 
-Before running this project, make sure you have the following installed:
+* **Node.js** (v18+)
+* **npm** or **yarn**
 
-- **Node.js** (version 18 or higher)
-- **npm** or **yarn** package manager
+---
 
 ## 🛠️ Installation
 
-1. **Clone the repository** (if applicable) or navigate to the project directory:
-   ```bash
-   cd nestjs-crud-mock
-   ```
+```bash
+git clone <your-repo>
+cd nestjs-crud-mock
+npm install
+```
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+---
 
 ## 🏃‍♂️ Running the Application
 
-### Development Mode
+### Development
+
 ```bash
 npm run start:dev
 ```
-This will start the application in watch mode, automatically restarting when files change.
 
-### Production Mode
+### Production
+
 ```bash
 npm run build
 npm run start:prod
 ```
 
-### Debug Mode
-```bash
-npm run start:debug
-```
+---
 
 ## 📡 API Endpoints
 
-The API runs on `http://localhost:3000` by default.
+Base URL: `http://localhost:3000`
 
-### Items API
+### 👤 Users API
 
-| Method | Endpoint | Description | Request Body | Response |
-|--------|----------|-------------|--------------|----------|
-| `GET` | `/items` | Get all items | - | Array of items |
-| `GET` | `/items/:id` | Get item by ID | - | Single item |
-| `POST` | `/items` | Create new item | `{ "name": "string", "description": "string" }` | Created item |
-| `PUT` | `/items/:id` | Update item by ID | `{ "name": "string", "description": "string" }` | Updated item |
-| `DELETE` | `/items/:id` | Delete item by ID | - | Deleted item |
+| Method | Endpoint           | Description             | Body Example                                 |
+| ------ | ------------------ | ----------------------- | -------------------------------------------- |
+| `POST` | `/users/register`  | Register a new user     | `{ "username": "john", "password": "1234" }` |
+| `POST` | `/users/login`     | Login with credentials  | `{ "username": "john", "password": "1234" }` |
+| `GET`  | `/users/:id/items` | Get all items of a user | -                                            |
 
-### Item Object Structure
+---
 
-```typescript
-interface Item {
-  id: number;
-  name: string;
-  description: string;
+### 📦 Items API
+
+| Method   | Endpoint         | Description                | Request Body                                    | Response     |
+| -------- | ---------------- | -------------------------- | ----------------------------------------------- | ------------ |
+| `GET`    | `/items`         | Get all items              | -                                               | `[ ... ]`    |
+| `GET`    | `/items/:id`     | Get single item            | -                                               | `{ ... }`    |
+| `POST`   | `/items/:userId` | Create new item for a user | `{ "name": "string", "description": "string" }` | Created item |
+| `PUT`    | `/items/:id`     | Update item by ID          | `{ "name": "string", "description": "string" }` | Updated item |
+| `DELETE` | `/items/:id`     | Delete item by ID          | -                                               | Deleted item |
+
+---
+
+### 📝 Example Flows
+
+#### 1. Register a user
+
+```bash
+POST /users/register
+{
+  "username": "alice",
+  "password": "pass123"
 }
 ```
 
-## 📝 API Examples
+#### 2. Login
 
-### Postman Collection
-
-A complete Postman collection is included in the project: `postman_collection.json`
-
-**To import the collection:**
-1. Open Postman
-2. Click "Import" 
-3. Select the `postman_collection.json` file
-4. The collection will be imported with all CRUD endpoints ready to test
-
-### Create an Item
 ```bash
-curl -X POST http://localhost:3000/items \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Sample Item",
-    "description": "This is a sample item description"
-  }'
+POST /users/login
+{
+  "username": "alice",
+  "password": "pass123"
+}
 ```
 
-### Get All Items
+#### 3. Create item for logged-in user (userId = 1)
+
 ```bash
-curl -X GET http://localhost:3000/items
+POST /items/1
+{
+  "name": "Laptop",
+  "description": "MacBook Pro 2023"
+}
 ```
 
-### Get Item by ID
+#### 4. Get all items for a user
+
 ```bash
-curl -X GET http://localhost:3000/items/1
+GET /users/1/items
 ```
 
-### Update an Item
-```bash
-curl -X PUT http://localhost:3000/items/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Updated Item",
-    "description": "This item has been updated"
-  }'
-```
-
-### Delete an Item
-```bash
-curl -X DELETE http://localhost:3000/items/1
-```
-
-## 🧪 Testing
-
-### Run Unit Tests
-```bash
-npm run test
-```
-
-### Run Tests in Watch Mode
-```bash
-npm run test:watch
-```
-
-### Run Tests with Coverage
-```bash
-npm run test:cov
-```
-
-### Run E2E Tests
-```bash
-npm run test:e2e
-```
-
-## 🔧 Development
-
-### Code Formatting
-```bash
-npm run format
-```
-
-### Linting
-```bash
-npm run lint
-```
-
-### Build
-```bash
-npm run build
-```
+---
 
 ## 📁 Project Structure
 
 ```
 src/
-├── items/
-│   ├── dto/
-│   │   ├── create-item.dto.ts
-│   │   └── update-item.dto.ts
-│   ├── items.controller.ts
-│   ├── items.service.ts
-│   └── items.module.ts
-├── app.controller.ts
-├── app.service.ts
+├── modules/
+│   ├── auth/
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   └── auth.module.ts
+│   │
+│   ├── items/
+│   │   ├── dto/
+│   │   │   ├── create-item.dto.ts
+│   │   │   └── update-item.dto.ts
+│   │   ├── entities/item.entity.ts
+│   │   ├── items.controller.ts
+│   │   ├── items.service.ts
+│   │   └── items.module.ts
+│   │
+│   ├── users/
+│   │   ├── dto/
+│   │   │   ├── create-user.dto.ts
+│   │   │   └── login-user.dto.ts
+│   │   ├── entities/user.entity.ts
+│   │   ├── users.controller.ts
+│   │   ├── users.service.ts
+│   │   └── users.module.ts
+│   │
+│   └── seed/
+│       ├── seed.service.ts
+│
 ├── app.module.ts
 └── main.ts
 ```
 
-### Key Files
+---
 
-- **`main.ts`** - Application entry point
-- **`app.module.ts`** - Root module configuration
-- **`items/`** - Items feature module
-  - **`items.controller.ts`** - HTTP request handling
-  - **`items.service.ts`** - Business logic and data management
-  - **`dto/`** - Data Transfer Objects for request/response validation
+## 🧪 Testing
 
-## 🛡️ Error Handling
-
-The API includes proper error handling:
-
-- **404 Not Found** - When trying to access, update, or delete a non-existent item
-- **400 Bad Request** - When request body is invalid
-- **500 Internal Server Error** - For unexpected server errors
-
-## 🔄 Data Persistence
-
-This is a mock API that uses in-memory storage. Data will be lost when the server restarts. In a production environment, you would typically:
-
-1. Add a database (PostgreSQL, MongoDB, etc.)
-2. Implement proper data persistence
-3. Add authentication and authorization
-4. Add input validation and sanitization
-5. Implement logging and monitoring
-
-## 📦 Dependencies
-
-### Production Dependencies
-- `@nestjs/common` - NestJS common utilities
-- `@nestjs/core` - NestJS core framework
-- `@nestjs/mapped-types` - Type utilities for DTOs
-- `@nestjs/platform-express` - Express.js integration
-- `reflect-metadata` - Metadata reflection
-- `rxjs` - Reactive programming library
-
-### Development Dependencies
-- `@nestjs/cli` - NestJS command-line interface
-- `@nestjs/testing` - Testing utilities
-- `eslint` - Code linting
-- `prettier` - Code formatting
-- `jest` - Testing framework
-- `typescript` - TypeScript compiler
-
-## 📄 License
-
-This project is unlicensed. See the `package.json` file for details.
+```bash
+npm run test
+npm run test:e2e
+```
 
 ---
 
-**Happy coding! 🎉**
+## 🔧 Development
+
+```bash
+npm run lint
+npm run format
+```
+
+---
+
+## 📦 Dependencies
+
+* `@nestjs/common`, `@nestjs/core`, `@nestjs/typeorm`
+* `class-validator`, `class-transformer`
+* `reflect-metadata`, `rxjs`
+* `typescript`
+
+---
+
+**✅ Current State (Aug 2025):**
+The project now supports **users & items with relationships**, working **register, login, and item ownership**, no tokens used (simple auth simulation).
